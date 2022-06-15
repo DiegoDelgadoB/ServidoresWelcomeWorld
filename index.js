@@ -58,4 +58,26 @@ app.get('/renombrar', (req,res) => {
     })
 });
 
+// Disponibilizar una ruta para eliminar un archivo cuyo nombre es declarado
+// en los parámetros de la consulta recibida.
 
+// En el mensaje de respuesta de la ruta para eliminar un archivo, cuyo nombre
+// es declarado en los parámetros de la consulta recibida.
+// En el mensaje de respuesta de la ruta para eliminar una archivo devuelve el
+// siguiente mensaje: "Tu solicitud para eliminar el archivo <nombre_archivo> se está
+// procesando", y luego de 3 segundos envía el mensaje de éxito mencionando el nombre 
+// del archivo eliminado.
+
+app.get('/eliminar', (req, res) => {
+    const archivo = req.query.archivo;
+    let ruta = `${__dirname}/archivos/${archivo}.txt`;
+
+    res.write(`<p>Tu solicitud para eliminar el archivo ${archivo} se está procesando</p>`, () => {
+        setTimeout(() => {
+            fs.unlink(ruta, (error) => {
+                error ? res.end("No se ha podido eliminar el archivo") : res.end("El archivo fue eliminado con éxito")
+                
+            })
+        }, 3000)
+    })
+})
